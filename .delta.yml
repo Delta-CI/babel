@@ -1,0 +1,44 @@
+jobs:
+  test-coverage:
+    docker: deltacidocker/node:14
+    # machine: *power_horse
+    steps:
+      - name: install node 15
+        run: |
+          curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
+          export NVM_DIR="$HOME/.nvm"
+          \. "$NVM_DIR/nvm.sh"
+          nvm install 15
+          npm i -g yarn
+      - name: Generate coverage report
+        run: |
+          make -j test-ci-coverage
+          yarn test:esm
+      - name: Upload coverage report
+        run: echo "Uploading.. Lol" && sleep 2
+
+  build:
+    docker: deltacidocker/node:14
+    env:
+      YARN_NODE_LINKER: pnp # use pnp linker for better linking performance and stricter checks
+      BABEL_8_BREAKING: false
+      STRIP_BABEL_8_FLAG: true
+    steps:
+      - name: Build babel artifacts
+        run: |
+          BABEL_ENV=test-legacy make -j build-standalone-ci
+      - name: Copy artifacts
+        run: |
+          ls /__ci/workflow_shared/babel-artifacts
+          cp -r --parents {codemods,eslint,packages}/*/lib/**/* packages/babel-standalone/*.js /__ci/workflow_shared/babel-artifacts
+
+  lint:
+    docker: deltacidocker/node:14
+    steps:
+      - name: Install
+        run: yarn install
+      - name: restore artifacts
+        run: cp -a /__ci/workflow_shared/babel-artifacts/* .
+      - name: Lint
+        run: make -j tscheck flowcheck-ci lint-ci
+
