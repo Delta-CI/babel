@@ -33,6 +33,8 @@ jobs:
           cp -r --parents {codemods,eslint,packages}/*/lib/**/* packages/babel-standalone/*.js /__ci/workflow_shared/babel-artifacts
 
   lint:
+    after:
+      - build
     docker: deltacidocker/node:14
     steps:
       - name: Install
