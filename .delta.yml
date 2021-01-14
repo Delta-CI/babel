@@ -29,7 +29,7 @@ jobs:
           BABEL_ENV=test-legacy make -j build-standalone-ci
       - name: Copy artifacts
         run: |
-          ls /__ci/workflow_shared/babel-artifacts
+          mkdir -p /__ci/workflow_shared/babel-artifacts
           cp -r --parents {codemods,eslint,packages}/*/lib/**/* packages/babel-standalone/*.js /__ci/workflow_shared/babel-artifacts
 
   lint:
@@ -40,7 +40,8 @@ jobs:
       - name: Install
         run: yarn install
       - name: restore artifacts
-        run: cp -a /__ci/workflow_shared/babel-artifacts/* .
+        run: |
+          cp -a /__ci/workflow_shared/babel-artifacts/* .
       - name: Lint
         run: make -j tscheck flowcheck-ci lint-ci
 
