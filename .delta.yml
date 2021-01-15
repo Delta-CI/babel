@@ -42,12 +42,12 @@ jobs:
         run: yarn install
       - name: restore artifacts
         run: |
-          sleep 1000
-          cp -a /__ci/workflow_shared/babel-artifacts/* .
+          cp --verbose -a /__ci/workflow_shared/babel-artifacts/* .
       - name: Lint
         run: make -j tscheck flowcheck-ci lint-ci
 
   test-6:
+    docker: deltacidocker/node:14
     after:
       - build
     steps:
@@ -61,7 +61,7 @@ jobs:
           yarn set resolution stack-utils@npm:^1.0.1 1.0.2
       - name: restore artifacts
         run: |
-          cp -a /__ci/workflow_shared/babel-artifacts/* .
+          cp --verbose -a /__ci/workflow_shared/babel-artifacts/* .
       - name: Test on node.js 6
         run: |
           curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
@@ -72,6 +72,7 @@ jobs:
           BABEL_ENV=test node ./node_modules/.bin/jest --ci --color
 
   test-8:
+    docker: deltacidocker/node:14
     after:
       - build
     steps:
@@ -85,7 +86,7 @@ jobs:
           yarn set resolution stack-utils@npm:^1.0.1 1.0.2
       - name: restore artifacts
         run: |
-          cp -a /__ci/workflow_shared/babel-artifacts/* .
+          cp --verbose -a /__ci/workflow_shared/babel-artifacts/* .
       - name: Test on node.js 8
         run: |
           curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
@@ -104,7 +105,7 @@ jobs:
         run: yarn install
       - name: restore artifacts
         run: |
-          cp -a /__ci/workflow_shared/babel-artifacts/* .
+          cp --verbose -a /__ci/workflow_shared/babel-artifacts/* .
       - name: Test on node.js 10
         run: |
           BABEL_ENV=test node ./node_modules/.bin/jest --ci --color
@@ -117,7 +118,7 @@ jobs:
         run: yarn install
       - name: restore artifacts
         run: |
-          cp -a /__ci/workflow_shared/babel-artifacts/* .
+          cp --verbose -a /__ci/workflow_shared/babel-artifacts/* .
       - name: Test on node.js 12
         run: |
           BABEL_ENV=test node ./node_modules/.bin/jest --ci --color
@@ -130,7 +131,7 @@ jobs:
         run: yarn install
       - name: restore artifacts
         run: |
-          cp -a /__ci/workflow_shared/babel-artifacts/* .
+          cp --verbose -a /__ci/workflow_shared/babel-artifacts/* .
       - name: Test on node.js 14
         run: |
           BABEL_ENV=test node ./node_modules/.bin/jest --ci --color
@@ -164,7 +165,7 @@ jobs:
         run: yarn install
       - name: restore artifacts
         run: |
-          cp -a /__ci/workflow_shared/babel-artifacts/* .
+          cp --verbose -a /__ci/workflow_shared/babel-artifacts/* .
       - name: Download tests
         run: make -j bootstrap-flow bootstrap-typescript bootstrap-test262
       - name: Run Test262 Tests
