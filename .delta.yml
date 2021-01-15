@@ -1,7 +1,9 @@
 jobs:
   test-coverage:
     docker: deltacidocker/node:14
-    # machine: *power_horse
+    machine: # use beefier machine, getting killed by OOM with default
+      vcpu: 8
+      mem_mb: 16000
     steps:
       - name: install node 15
         run: |
@@ -156,18 +158,18 @@ jobs:
     env:
       BABEL_ENV: test
       BABEL_8_BREAKING: true
-      STRIP_BABEL_8_FLAG: true
-      BABEL_TYPES_8_BREAKING: true
+
     docker: deltacidocker/node:12
     steps:
       - name: Install and build
-        run: make -j bootstrap
+        run: STRIP_BABEL_8_FLAG=true make -j bootstrap
+
       - name: Test
         # Hack: --color has supports-color@5 returned true for GitHub CI
         # Remove once `chalk` is bumped to 4.0.
         run: |
-          yarn jest --ci --color
-          yarn test:esm
+          BABEL_TYPES_8_BREAKING=true yarn jest --ci --color
+          BABEL_TYPES_8_BREAKING=true yarn test:esm
 
   # test-windows: unsupported
 
