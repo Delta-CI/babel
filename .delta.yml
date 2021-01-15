@@ -31,8 +31,7 @@ jobs:
         run: |
           mkdir -p /__ci/workflow_shared/babel-artifacts
           ls codemods eslint packages
-          sleep 1000
-          cp -r --parents {codemods,eslint,packages}/*/lib/**/* packages/babel-standalone/*.js /__ci/workflow_shared/babel-artifacts
+          cp -r --parents codemods/*/lib/** {eslint,packages}/*/lib/**/* packages/babel-standalone/*.js /__ci/workflow_shared/babel-artifacts
 
   lint:
     after:
